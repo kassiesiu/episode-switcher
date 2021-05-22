@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import { getEpisodes, getShowById, search } from "../api/get";
+import { getShowById, search } from "../api/get";
 import Header from "./Header";
 import ShowInfo from "./ShowInfo";
 import Replace from "./Replace";
+import Episodes from "./Episodes";
+import formatEpisodesBySeasons from "../utils/format-episodes";
 
 const MAX_SHOWS = 54999;
 
@@ -12,20 +14,16 @@ class EpisodeContainer extends Component {
 
     this.state = {
       currentShow: ShowInfo.defaultProps.currentShow,
-      episodes: [],
+      episodesBySeason: {},
     };
 
     this.search = this.search.bind(this);
   }
 
   async componentDidMount() {
-    console.log("here");
     // some random ids in this range will be invalid, so make sure if it is to refresh
     const showId = Math.floor(Math.random() * MAX_SHOWS);
-    await this.refreshShow(showId);
-  }
 
-  async refreshShow(showId) {
     const {
       data: {
         _embedded: { episodes },
@@ -33,7 +31,12 @@ class EpisodeContainer extends Component {
       },
     } = await getShowById(showId);
 
-    this.setState({ currentShow, episodes });
+    console.log("object :>> ", formatEpisodesBySeasons(episodes));
+
+    this.setState({
+      currentShow,
+      episodesBySeason: formatEpisodesBySeasons(episodes),
+    });
   }
 
   async search(value) {
@@ -44,18 +47,20 @@ class EpisodeContainer extends Component {
       },
     } = await search(value);
 
-    console.log("episodes :>> ", episodes);
-    console.log("currentShow :>> ", currentShow);
-    this.setState({ currentShow, episodes });
+    this.setState({
+      currentShow,
+      episodesBySeason: formatEpisodesBySeasons(episodes),
+    });
   }
 
   render() {
-    const { currentShow, episodes } = this.state;
+    const { currentShow, episodesBySeason } = this.state;
     return (
       <div>
         <Header onSearch={this.search} />
         <ShowInfo currentShow={currentShow} />
-        <Replace episodes={episodes} />
+        <Replace episodesBySeason={episodesBySeason} />
+        <Episodes episodesBySeason={episodesBySeason} />
       </div>
     );
   }

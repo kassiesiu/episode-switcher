@@ -47,18 +47,19 @@ class Replace extends Component {
   }
 
   renderSeasonDropdownItems() {
-    const { episodes } = this.props;
-    const seasons = new Set(episodes.map(({ season }) => season));
-    return Replace.getDropdownItems([...seasons], "Season", this.selectSeason);
+    const { episodesBySeason } = this.props;
+    return Replace.getDropdownItems(
+      Object.keys(episodesBySeason),
+      "Season",
+      this.selectSeason
+    );
   }
 
   renderEpisodeDropdownItems() {
     const { selectedSeason } = this.state;
-    const { episodes } = this.props;
+    const { episodesBySeason } = this.props;
 
-    const episodesWithinSeason = episodes.filter(
-      ({ season }) => Number(season) === Number(selectedSeason)
-    );
+    const episodesWithinSeason = episodesBySeason[selectedSeason] || [];
 
     return Replace.getDropdownItems(
       episodesWithinSeason.map(({ number }) => number),
@@ -95,15 +96,13 @@ class Replace extends Component {
 }
 
 Replace.propTypes = {
-  episodes: PropTypes.arrayOf(
-    PropTypes.shape({
-      season: PropTypes.number,
-    })
+  episodesBySeason: PropTypes.objectOf(
+    PropTypes.arrayOf(PropTypes.shape({ season: PropTypes.number }))
   ),
 };
 
 Replace.defaultProps = {
-  episodes: [],
+  episodesBySeason: {},
 };
 
 export default Replace;
