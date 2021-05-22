@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { getShow } from "../api/get";
+import { getEpisodes, getShowById, search } from "../api/get";
 import Header from "./Header";
 import ShowInfo from "./ShowInfo";
 import Replace from "./Replace";
@@ -12,24 +12,50 @@ class EpisodeContainer extends Component {
 
     this.state = {
       currentShow: ShowInfo.defaultProps.currentShow,
+      episodes: [],
     };
+
+    this.search = this.search.bind(this);
   }
 
   async componentDidMount() {
-    const res = await getShow(Math.floor(Math.random() * MAX_SHOWS));
+    console.log("here");
+    // some random ids in this range will be invalid, so make sure if it is to refresh
+    const showId = Math.floor(Math.random() * MAX_SHOWS);
+    await this.refreshShow(showId);
+  }
 
-    console.log("res.data :>> ", res.data);
+  async refreshShow(showId) {
+    const {
+      data: {
+        _embedded: { episodes },
+        ...currentShow
+      },
+    } = await getShowById(showId);
 
-    this.setState({ currentShow: res.data });
+    this.setState({ currentShow, episodes });
+  }
+
+  async search(value) {
+    const {
+      data: {
+        _embedded: { episodes },
+        ...currentShow
+      },
+    } = await search(value);
+
+    console.log("episodes :>> ", episodes);
+    console.log("currentShow :>> ", currentShow);
+    this.setState({ currentShow, episodes });
   }
 
   render() {
-    const { currentShow } = this.state;
+    const { currentShow, episodes } = this.state;
     return (
       <div>
-        <Header />
+        <Header onSearch={this.search} />
         <ShowInfo currentShow={currentShow} />
-        <Replace />
+        <Replace episodes={episodes} />
       </div>
     );
   }

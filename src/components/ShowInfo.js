@@ -37,10 +37,10 @@ class ShowInfo extends Component {
 
 ShowInfo.propTypes = {
   currentShow: PropTypes.shape({
+    genres: PropTypes.arrayOf(PropTypes.string),
     image: PropTypes.shape({
       original: PropTypes.string,
     }),
-    genres: PropTypes.arrayOf(PropTypes.string),
     premiered: PropTypes.string,
     name: PropTypes.string,
     summary: PropTypes.string,
@@ -49,10 +49,10 @@ ShowInfo.propTypes = {
 
 ShowInfo.defaultProps = {
   currentShow: {
+    genres: [],
     image: {
       original: "",
     },
-    genres: [],
     premiered: "",
     name: "",
     summary: "",
