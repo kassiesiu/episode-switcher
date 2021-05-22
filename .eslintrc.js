@@ -15,6 +15,7 @@ module.exports = {
   rules: {
     "react/jsx-filename-extension": "off",
     "no-param-reassign": "off",
+    "react/jsx-props-no-spreading": "off",
     "prettier/prettier": ["error"],
   },
 };

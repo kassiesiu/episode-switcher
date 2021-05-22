@@ -1,14 +1,13 @@
 import React, { Component } from "react";
-import { Image, Container } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import PropTypes from "prop-types";
+import Image from "./Image";
+
+import "./Episodes.css";
 
 class Episodes extends Component {
   constructor(props) {
     super(props);
-
-    // this.state = {
-    //   searchInput: "",
-    // };
 
     this.getEpisodeCount = this.getEpisodeCount.bind(this);
     this.renderSeason = this.renderSeason.bind(this);
@@ -16,20 +15,16 @@ class Episodes extends Component {
 
   static renderEpisode(episode) {
     return (
-      <div>
-        {episode.image ? (
-          <Image
-            className="image"
-            src={episode.image.original} // conditional for when image is null
-          />
-        ) : (
-          <div>imghere</div>
-        )}
-        <h4>{episode.name}</h4>
-        <div className="text-secondary">
-          Season {episode.season} | Episode {episode.number} | {episode.airdate}
+      <div className="episode">
+        <Image className="image" image={episode.image} />
+        <div className="info">
+          <h4>{episode.name}</h4>
+          <div className="text-secondary">
+            Season {episode.season} | Episode {episode.number} |{" "}
+            {episode.airdate}
+          </div>
+          <div>{episode.summary}</div>
         </div>
-        <div>{episode.summary}</div>
       </div>
     );
   }
@@ -45,7 +40,7 @@ class Episodes extends Component {
     const episodesWithinSeason = episodesBySeason[season];
 
     return (
-      <div>
+      <div className="season">
         <h1>Season {season}</h1>
         <div className="text-secondary">{`${this.getEpisodeCount(
           season

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import { Image, Container } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import PropTypes from "prop-types";
+import Image from "./Image";
 
 import "./ShowInfo.css";
 
@@ -21,10 +22,7 @@ class ShowInfo extends Component {
     const { currentShow } = this.props;
     return (
       <Container className="main-container">
-        <Image
-          className="image"
-          src={currentShow.image.original} // conditional for when image is null
-        />
+        <Image className="image" image={currentShow.image} />
         <div className="info">
           <h1>{currentShow.name}</h1>
           {this.renderSubText()}

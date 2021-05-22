@@ -16,8 +16,9 @@ class Replace extends Component {
     super(props);
 
     this.state = {
-      selectedSeason: 1,
+      selectedSeason: 1, // change this
       selectedEpisode: 1,
+      replaceInput: "",
     };
 
     this.selectSeason = this.selectSeason.bind(this);
@@ -46,6 +47,16 @@ class Replace extends Component {
     });
   }
 
+  handleKeyPress(target) {
+    // fixed bug where pressing enter would refresh page
+    if (target.charCode === 13) {
+      target.preventDefault();
+      this.replace();
+    }
+  }
+
+  replace() {}
+
   renderSeasonDropdownItems() {
     const { episodesBySeason } = this.props;
     return Replace.getDropdownItems(
@@ -69,7 +80,7 @@ class Replace extends Component {
   }
 
   render() {
-    const { selectedSeason, selectedEpisode } = this.state;
+    const { selectedSeason, selectedEpisode, replaceInput } = this.state;
     return (
       <Container className="replace-container">
         Replace
@@ -87,8 +98,15 @@ class Replace extends Component {
         </DropdownButton>
         with
         <Form inline>
-          <FormControl type="text" />
-          <Button variant="secondary">Replace</Button>
+          <FormControl
+            type="text"
+            value={replaceInput}
+            onChange={this.setReplaceInput}
+            onKeyPress={this.handleKeyPress}
+          />
+          <Button variant="secondary" onClick={this.replace}>
+            Replace
+          </Button>
         </Form>
       </Container>
     );

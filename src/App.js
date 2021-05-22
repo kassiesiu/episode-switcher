@@ -1,13 +1,7 @@
-import React, { Component } from "react";
+import React from "react";
 
-import EpisodeContainer from './components/EpisodeContainer'
+import EpisodeContainer from "./components/EpisodeContainer";
 
-class App extends Component {
-  render() {
-    return (
-      <EpisodeContainer></EpisodeContainer>
-    );
-  }
-}
+const App = () => <EpisodeContainer />;
 
 export default App;

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Navbar, Form, FormControl, Button } from "react-bootstrap";
+import { Navbar, Form, FormControl, Button, Container } from "react-bootstrap";
 import PropTypes from "prop-types";
 
 class Header extends Component {
@@ -41,20 +41,22 @@ class Header extends Component {
     return (
       <div>
         <Navbar bg="dark" variant="dark">
-          <Navbar.Brand>Episode Switcher</Navbar.Brand>
+          <Container>
+            <Navbar.Brand>Episode Switcher</Navbar.Brand>
 
-          <Form inline>
-            <FormControl
-              type="text"
-              placeholder="Search"
-              value={searchInput}
-              onChange={this.setSearchInput}
-              onKeyPress={this.handleKeyPress}
-            />
-            <Button variant="outline-success" onClick={this.search}>
-              Search
-            </Button>
-          </Form>
+            <Form inline>
+              <FormControl
+                type="text"
+                placeholder="Search"
+                value={searchInput}
+                onChange={this.setSearchInput}
+                onKeyPress={this.handleKeyPress}
+              />
+              <Button variant="outline-success" onClick={this.search}>
+                Search
+              </Button>
+            </Form>
+          </Container>
         </Navbar>
       </div>
     );
