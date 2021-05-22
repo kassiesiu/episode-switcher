@@ -22,7 +22,7 @@ class ShowInfo extends Component {
     const { currentShow } = this.props;
     return (
       <Container className="main-container">
-        <Image className="image" image={currentShow.image} />
+        <Image image={currentShow.image} />
         <div className="info">
           <h1>{currentShow.name}</h1>
           {this.renderSubText()}

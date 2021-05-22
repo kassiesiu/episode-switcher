@@ -16,7 +16,7 @@ class Episodes extends Component {
   static renderEpisode(episode) {
     return (
       <div className="episode">
-        <Image className="image" image={episode.image} />
+        <Image image={episode.image} />
         <div className="info">
           <h4>{episode.name}</h4>
           <div className="text-secondary">

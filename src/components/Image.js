@@ -5,9 +5,8 @@ import PropTypes from "prop-types";
 import "./Image.css";
 
 const Image = ({ image, ...props }) => {
-  console.log("image :>> ", image);
   if (image) {
-    const newProps = { ...props, src: image.original };
+    const newProps = { ...props, src: image.original, className: "image" };
     return <ImageBootstrap {...newProps} />;
   }
   return <div className="empty-image" />;

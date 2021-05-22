@@ -1,15 +1,10 @@
 import React, { Component } from "react";
-import {
-  Button,
-  Container,
-  DropdownButton,
-  Dropdown,
-  Form,
-  FormControl,
-} from "react-bootstrap";
+import { Container, DropdownButton, Dropdown } from "react-bootstrap";
 import PropTypes from "prop-types";
+import Input from "./Input";
 
 import "./Replace.css";
+import { search } from "../api/get";
 
 class Replace extends Component {
   constructor(props) {
@@ -18,11 +13,11 @@ class Replace extends Component {
     this.state = {
       selectedSeason: 1, // change this
       selectedEpisode: 1,
-      replaceInput: "",
     };
 
     this.selectSeason = this.selectSeason.bind(this);
     this.selectEpisode = this.selectEpisode.bind(this);
+    this.replace = this.replace.bind(this);
   }
 
   static getDropdownItems(items, title, onClick) {
@@ -47,15 +42,11 @@ class Replace extends Component {
     });
   }
 
-  handleKeyPress(target) {
-    // fixed bug where pressing enter would refresh page
-    if (target.charCode === 13) {
-      target.preventDefault();
-      this.replace();
-    }
+  async replace(value) {
+    const { onReplace } = this.props;
+    const { selectedSeason, selectedEpisode } = this.state;
+    onReplace(value, selectedSeason, selectedEpisode);
   }
-
-  replace() {}
 
   renderSeasonDropdownItems() {
     const { episodesBySeason } = this.props;
@@ -80,7 +71,7 @@ class Replace extends Component {
   }
 
   render() {
-    const { selectedSeason, selectedEpisode, replaceInput } = this.state;
+    const { selectedSeason, selectedEpisode } = this.state;
     return (
       <Container className="replace-container">
         Replace
@@ -97,17 +88,7 @@ class Replace extends Component {
           {this.renderEpisodeDropdownItems()}
         </DropdownButton>
         with
-        <Form inline>
-          <FormControl
-            type="text"
-            value={replaceInput}
-            onChange={this.setReplaceInput}
-            onKeyPress={this.handleKeyPress}
-          />
-          <Button variant="secondary" onClick={this.replace}>
-            Replace
-          </Button>
-        </Form>
+        <Input buttonText="Replace" onClick={this.replace} />
       </Container>
     );
   }
@@ -117,10 +98,12 @@ Replace.propTypes = {
   episodesBySeason: PropTypes.objectOf(
     PropTypes.arrayOf(PropTypes.shape({ season: PropTypes.number }))
   ),
+  onReplace: PropTypes.func,
 };
 
 Replace.defaultProps = {
   episodesBySeason: {},
+  onReplace: () => {},
 };
 
 export default Replace;

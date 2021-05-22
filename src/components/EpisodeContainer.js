@@ -18,6 +18,7 @@ class EpisodeContainer extends Component {
     };
 
     this.search = this.search.bind(this);
+    this.replace = this.replace.bind(this);
   }
 
   async componentDidMount() {
@@ -30,8 +31,6 @@ class EpisodeContainer extends Component {
         ...currentShow
       },
     } = await getShowById(showId);
-
-    console.log("object :>> ", formatEpisodesBySeasons(episodes));
 
     this.setState({
       currentShow,
@@ -53,13 +52,47 @@ class EpisodeContainer extends Component {
     });
   }
 
+  async replace(value, season, episode) {
+    const { episodesBySeason } = this.state;
+
+    const {
+      data: {
+        _embedded: { episodes },
+      },
+    } = await search(value);
+
+    // error handling
+
+    const formatted = formatEpisodesBySeasons(episodes);
+
+    const episodeToReplaceIndex = episodesBySeason[season].findIndex(
+      (e) => e.number === episode
+    );
+
+    console.log("episodeToReplaceIndex :>> ", episodeToReplaceIndex);
+
+    const newEpisodesList = [...episodesBySeason[season]];
+    const replaceEpisode = formatted[season].find((e) => e.number === episode);
+    newEpisodesList[episodeToReplaceIndex] = replaceEpisode;
+
+    console.log("newEpisodesList :>> ", newEpisodesList);
+
+    this.setState((prevState) => ({
+      ...prevState,
+      episodesBySeason: {
+        ...prevState.episodesBySeason,
+        [season]: newEpisodesList,
+      },
+    }));
+  }
+
   render() {
     const { currentShow, episodesBySeason } = this.state;
     return (
       <div>
         <Header onSearch={this.search} />
         <ShowInfo currentShow={currentShow} />
-        <Replace episodesBySeason={episodesBySeason} />
+        <Replace episodesBySeason={episodesBySeason} onReplace={this.replace} />
         <Episodes episodesBySeason={episodesBySeason} />
       </div>
     );
