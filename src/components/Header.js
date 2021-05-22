@@ -11,7 +11,7 @@ class Header extends Component {
         <Navbar bg="dark" variant="dark">
           <Container>
             <Navbar.Brand>Episode Switcher</Navbar.Brand>
-            <Input buttonText="Replace" onClick={onSearch} />
+            <Input buttonText="Search" onClick={onSearch} />
           </Container>
         </Navbar>
       </div>

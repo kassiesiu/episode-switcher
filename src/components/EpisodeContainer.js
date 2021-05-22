@@ -66,16 +66,14 @@ class EpisodeContainer extends Component {
     const formatted = formatEpisodesBySeasons(episodes);
 
     const episodeToReplaceIndex = episodesBySeason[season].findIndex(
-      (e) => e.number === episode
+      (e) => Number(e.number) === Number(episode)
     );
 
-    console.log("episodeToReplaceIndex :>> ", episodeToReplaceIndex);
-
     const newEpisodesList = [...episodesBySeason[season]];
-    const replaceEpisode = formatted[season].find((e) => e.number === episode);
+    const replaceEpisode = formatted[season].find(
+      (e) => Number(e.number) === Number(episode)
+    );
     newEpisodesList[episodeToReplaceIndex] = replaceEpisode;
-
-    console.log("newEpisodesList :>> ", newEpisodesList);
 
     this.setState((prevState) => ({
       ...prevState,

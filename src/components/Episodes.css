@@ -6,3 +6,8 @@
 .season {
   margin-top: 40px;
 }
+
+.image-container {
+  display: flex;
+  align-self: flex-start;
+}
