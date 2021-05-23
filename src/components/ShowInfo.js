@@ -19,10 +19,6 @@ class ShowInfo extends Component {
 
   render() {
     const { currentShow } = this.props;
-    console.log(
-      "convertStringToHTML(currentShow.summary) :>> ",
-      convertStringToHTML(currentShow.summary)
-    );
     return (
       <div className="main-container">
         <Image image={currentShow.image} />
