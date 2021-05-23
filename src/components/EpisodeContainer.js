@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { Container } from "react-bootstrap";
 import { getShowById, search } from "../api/get";
 import Header from "./Header";
-import ShowInfo from "./ShowInfo";
 import Replace from "./Replace";
+import ShowInfo from "./ShowInfo";
 import Episodes from "./Episodes";
 import Errors from "./Errors";
 
