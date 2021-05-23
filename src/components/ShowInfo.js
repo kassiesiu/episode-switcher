@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import Image from "./Image";
 
 import "./ShowInfo.css";
-import convertStringToHTML from "../utils/convert-string-to-html";
 
 class ShowInfo extends Component {
   renderSubText() {
