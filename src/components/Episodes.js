@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Container } from "react-bootstrap";
 import PropTypes from "prop-types";
 import Image from "./Image";
 
@@ -22,10 +21,10 @@ class Episodes extends Component {
         <div className="info">
           <h4>{episode.name}</h4>
           <div className="text-secondary">
-            Season {episode.season} | Episode {episode.number} |{" "}
+            Season {episode.season} | Episode {episode.number} |
             {episode.airdate}
           </div>
-          <div>{episode.summary}</div>
+          <div dangerouslySetInnerHTML={{ __html: episode.summary }} />
         </div>
       </div>
     );
@@ -56,11 +55,11 @@ class Episodes extends Component {
   render() {
     const { episodesBySeason } = this.props;
     return (
-      <Container>
+      <div>
         {Object.keys(episodesBySeason).map((season) =>
           this.renderSeason(season)
         )}
-      </Container>
+      </div>
     );
   }
 }

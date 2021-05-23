@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import { Container, DropdownButton, Dropdown } from "react-bootstrap";
+import { DropdownButton, Dropdown } from "react-bootstrap";
 import PropTypes from "prop-types";
 import Input from "./Input";
 
 import "./Replace.css";
-import { search } from "../api/get";
 
 class Replace extends Component {
   constructor(props) {
@@ -73,7 +72,7 @@ class Replace extends Component {
   render() {
     const { selectedSeason, selectedEpisode } = this.state;
     return (
-      <Container className="replace-container">
+      <div className="replace-container">
         Replace
         <DropdownButton
           id="dropdown-basic-button"
@@ -89,7 +88,7 @@ class Replace extends Component {
         </DropdownButton>
         with
         <Input buttonText="Replace" onClick={this.replace} />
-      </Container>
+      </div>
     );
   }
 }

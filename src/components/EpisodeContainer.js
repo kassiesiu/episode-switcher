@@ -1,9 +1,12 @@
 import React, { Component } from "react";
+import { Container } from "react-bootstrap";
 import { getShowById, search } from "../api/get";
 import Header from "./Header";
 import ShowInfo from "./ShowInfo";
 import Replace from "./Replace";
 import Episodes from "./Episodes";
+import Errors from "./Errors";
+
 import formatEpisodesBySeasons from "../utils/format-episodes";
 
 const MAX_SHOWS = 54999;
@@ -15,6 +18,7 @@ class EpisodeContainer extends Component {
     this.state = {
       currentShow: ShowInfo.defaultProps.currentShow,
       episodesBySeason: {},
+      error: Errors.defaultProps.errors,
     };
 
     this.search = this.search.bind(this);
@@ -53,45 +57,68 @@ class EpisodeContainer extends Component {
   }
 
   async replace(value, season, episode) {
-    const { episodesBySeason } = this.state;
+    try {
+      const { episodesBySeason } = this.state;
 
-    const {
-      data: {
-        _embedded: { episodes },
-      },
-    } = await search(value);
+      const {
+        data: {
+          _embedded: { episodes },
+        },
+      } = await search(value);
 
-    // error handling
+      const formatted = formatEpisodesBySeasons(episodes);
 
-    const formatted = formatEpisodesBySeasons(episodes);
+      const episodeToReplaceIndex = episodesBySeason[season].findIndex(
+        (e) => Number(e.number) === Number(episode)
+      );
 
-    const episodeToReplaceIndex = episodesBySeason[season].findIndex(
-      (e) => Number(e.number) === Number(episode)
-    );
+      const replaceEpisode = formatted[season].find(
+        (e) => Number(e.number) === Number(episode)
+      );
 
-    const newEpisodesList = [...episodesBySeason[season]];
-    const replaceEpisode = formatted[season].find(
-      (e) => Number(e.number) === Number(episode)
-    );
-    newEpisodesList[episodeToReplaceIndex] = replaceEpisode;
+      if (!replaceEpisode) {
+        // if there is no replace episode, that means the searched show doesn't have it
+        this.setState({
+          error: `There is no matching episode for the season, episode, and show provided.`,
+        });
 
-    this.setState((prevState) => ({
-      ...prevState,
-      episodesBySeason: {
-        ...prevState.episodesBySeason,
-        [season]: newEpisodesList,
-      },
-    }));
+        return;
+      }
+
+      const newEpisodesList = [...episodesBySeason[season]];
+
+      newEpisodesList[episodeToReplaceIndex] = replaceEpisode;
+
+      this.setState((prevState) => ({
+        ...prevState,
+        episodesBySeason: {
+          ...prevState.episodesBySeason,
+          [season]: newEpisodesList,
+        },
+        error: "",
+      }));
+    } catch (e) {
+      // if error, that means show does not exist
+      this.setState({
+        error: `There is no show matching "${value}"`,
+      });
+    }
   }
 
   render() {
-    const { currentShow, episodesBySeason } = this.state;
+    const { currentShow, episodesBySeason, error } = this.state;
     return (
       <div>
         <Header onSearch={this.search} />
-        <ShowInfo currentShow={currentShow} />
-        <Replace episodesBySeason={episodesBySeason} onReplace={this.replace} />
-        <Episodes episodesBySeason={episodesBySeason} />
+        <Container>
+          <ShowInfo currentShow={currentShow} />
+          <Replace
+            episodesBySeason={episodesBySeason}
+            onReplace={this.replace}
+          />
+          <Errors error={error} />
+          <Episodes episodesBySeason={episodesBySeason} />
+        </Container>
       </div>
     );
   }

@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import { Container } from "react-bootstrap";
 import PropTypes from "prop-types";
 import Image from "./Image";
 
 import "./ShowInfo.css";
+import convertStringToHTML from "../utils/convert-string-to-html";
 
 class ShowInfo extends Component {
   renderSubText() {
@@ -20,15 +20,19 @@ class ShowInfo extends Component {
 
   render() {
     const { currentShow } = this.props;
+    console.log(
+      "convertStringToHTML(currentShow.summary) :>> ",
+      convertStringToHTML(currentShow.summary)
+    );
     return (
-      <Container className="main-container">
+      <div className="main-container">
         <Image image={currentShow.image} />
         <div className="info">
           <h1>{currentShow.name}</h1>
           {this.renderSubText()}
-          <div>{currentShow.summary}</div>
+          <div dangerouslySetInnerHTML={{ __html: currentShow.summary }} />
         </div>
-      </Container>
+      </div>
     );
   }
 }
