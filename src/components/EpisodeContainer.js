@@ -26,7 +26,6 @@ class EpisodeContainer extends Component {
   }
 
   async componentDidMount() {
-    // some random ids in this range will be invalid, so make sure if it is to refresh
     const showId = Math.floor(Math.random() * MAX_SHOWS);
 
     const {
